@@ -25,13 +25,14 @@ angle_arrayt=angle_array.transpose()
 
 
 #Network parameters
-n_hidden1 = 147
-n_hidden2 = 74
-n_hidden3 = 50
+n_hidden1 = 196
+n_hidden2 = 100
+n_hidden3 = 40
 n_input = 98
-n_output = 1
+n_output = 3
+
 #Learning parameters
-learning_constant = 0.002
+learning_constant = 0.008
 number_epochs = 10000
 batch_size = 10000
 
@@ -41,26 +42,18 @@ Y = tf.placeholder("float", [None, n_output])
 
 #DEFINING WEIGHTS AND BIASES
 
-#Biases first hidden layer
+#First hidden layer
 b1 = tf.Variable(tf.random_normal([n_hidden1]))
-#Biases second hidden layer
-b2 = tf.Variable(tf.random_normal([n_hidden2]))
-#Biases output layer
-b3 = tf.Variable(tf.random_normal([n_hidden3]))
-
-b4 = tf.Variable(tf.random_normal([n_output]))
-
-
-#Weights connecting input layer with first hidden layer
 w1 = tf.Variable(tf.random_normal([n_input, n_hidden1]))
-#Weights connecting first hidden layer with second hidden layer
+#Second hidden layer
+b2 = tf.Variable(tf.random_normal([n_hidden2]))
 w2 = tf.Variable(tf.random_normal([n_hidden1, n_hidden2]))
-#Weights connecting second hidden layer with output layer
+#Third hidden layer
+b3 = tf.Variable(tf.random_normal([n_hidden3]))
 w3 = tf.Variable(tf.random_normal([n_hidden2, n_hidden3]))
-
+#Output layer
+b4 = tf.Variable(tf.random_normal([n_output]))
 w4 = tf.Variable(tf.random_normal([n_hidden3, n_output]))
-
-
 
 #The incoming data given to the
 #network is input_d
@@ -92,9 +85,9 @@ init = tf.global_variables_initializer()
 
 label=angle_array#+1e-50-1e-50
 
-batch_x=(whole_data-200)/2000
-temp=np.array([angle_array[:,0]])
-batch_y=temp.transpose()
+batch_x=(whole_data-200)/2000 #Normalisation
+#temp=np.array([angle_array[:,:]])
+batch_y=angle_array
 
 batch_x_train=batch_x
 batch_y_train=batch_y
@@ -119,9 +112,9 @@ with tf.Session() as sess:
         #Run the optimizer feeding the network with the batch
         sess.run(optimizer, feed_dict={X: batch_x_train, Y: batch_y_train})
         #Display the epoch
-        if epoch % 100 == 0 and epoch>10:
+        if epoch % 10 == 0 and epoch>10:
             print("Epoch:", '%d' % (epoch))
-            print("Accuracy:", loss_op.eval({X: batch_x_train, Y: batch_y_train}) )
+            print("Loss:", loss_op.eval({X: batch_x_train, Y: batch_y_train}) )
 
 
     # Test model
