@@ -5,6 +5,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 import matplotlib.pyplot as plt
 from pandas import DataFrame
+import sklearn.model_selection as skm
 
 import pandas as pd
 
@@ -21,20 +22,17 @@ whole_data=np.concatenate((x_arrayt, y_arrayt),axis=1)
 
 angle = pd.read_csv("angle.csv", header=0)
 angle_array = np.asarray(angle, dtype = "float")
-angle_arrayt=angle_array.transpose()
-
 
 #Network parameters
-n_hidden1 = 196
-n_hidden2 = 100
-n_hidden3 = 40
+n_hidden1 = 72
+n_hidden2 = 48
+n_hidden3 = 24
 n_input = 98
 n_output = 3
 
 #Learning parameters
-learning_constant = 0.008
+learning_constant = 0.006
 number_epochs = 10000
-batch_size = 10000
 
 #Defining the input and the output
 X = tf.placeholder("float", [None, n_input])
@@ -58,6 +56,7 @@ w4 = tf.Variable(tf.random_normal([n_hidden3, n_output]))
 #The incoming data given to the
 #network is input_d
 def multilayer_perceptron(input_d):
+    
     #Task of neurons of first hidden layer
     layer_1 = tf.nn.sigmoid(tf.add(tf.matmul(input_d, w1), b1))
     #Task of neurons of second hidden layer
@@ -86,67 +85,48 @@ init = tf.global_variables_initializer()
 label=angle_array#+1e-50-1e-50
 
 batch_x=(whole_data-200)/2000 #Normalisation
-#temp=np.array([angle_array[:,:]])
+
 batch_y=angle_array
 
-batch_x_train=batch_x
-batch_y_train=batch_y
-
-batch_x_test=batch_x
-batch_y_test=batch_y
+# Training split
+batch_x_train=batch_x[0:275712, :]
+batch_y_train=batch_y[0:275712, :]
 
 label_train=label
 
-label_test=label
+# Testing split
+batch_x_test=batch_x[275713:,:]
+batch_y_test=batch_y[275713:,:]
 
+label_test=label
 
 with tf.Session() as sess:
     sess.run(init)
     #Training epoch
     for epoch in range(number_epochs):
-        #Get one batch of images
-        #batch_x, batch_y = mnist.train.next_batch(batch_size)
-        
-        #print (batch_x)
-        #print ((batch_x.shape))
+
         #Run the optimizer feeding the network with the batch
         sess.run(optimizer, feed_dict={X: batch_x_train, Y: batch_y_train})
+        
         #Display the epoch
-        if epoch % 10 == 0 and epoch>10:
+        if epoch % 100 == 0 and epoch>10:
             print("Epoch:", '%d' % (epoch))
             print("Loss:", loss_op.eval({X: batch_x_train, Y: batch_y_train}) )
 
 
     # Test model
-    pred = (neural_network)  # Apply softmax to logits
+    pred = (neural_network)
     accuracy=tf.keras.losses.MSE(pred,Y)
-    print("Accuracy:", np.square(accuracy.eval({X: batch_x_train, Y: batch_y_train})).mean() )
-    #tf.keras.evaluate(pred,batch_x)
 
-    print("Prediction:", pred.eval({X: batch_x_train}))
-    print(batch_y)
+    print("Accuracy:", np.square(accuracy.eval({X: batch_x_test, Y: batch_y_test})).mean() )
+    print("Prediction:", pred.eval({X: batch_x_test}))
+
+    
 
     output=neural_network.eval({X: batch_x_train})
-    plt.plot(batch_y_train, 'r', output, 'b')
-    plt.ylabel('some numbers')
-    plt.show()
-   
-
-    plt.plot(batch_y_train[30000:300020], 'r', output[30000:300020], 'b')
-    plt.ylabel('some numbers')
-    plt.show()
-    
-    print(batch_y_train[30000:300020])
-    print(output[30000:300020])
     
     df = DataFrame(output)
 
     export_csv = df.to_csv ('output.csv', index = None, header=True) #Don't forget to add '.csv' at the end of the path
 
     print (df)
-
-    
-    #correct_prediction = tf.math.subtract((pred), (Y))
-    # Calculate accuracy
-    #accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    #print("Accuracy:", accuracy.eval({X: batch_x, Y: batch_y}))
