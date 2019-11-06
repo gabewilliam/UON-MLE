@@ -24,15 +24,15 @@ angle = pd.read_csv("angle.csv", header=0)
 angle_array = np.asarray(angle, dtype = "float")
 
 #Network parameters
-n_hidden1 = 72
-n_hidden2 = 48
-n_hidden3 = 24
+n_hidden1 = 80
+n_hidden2 = 50
+n_hidden3 = 25
 n_input = 98
 n_output = 3
 
 #Learning parameters
-learning_constant = 0.006
-number_epochs = 10000
+learning_constant = 0.0002
+number_epochs = 5000
 
 #Defining the input and the output
 X = tf.placeholder("float", [None, n_input])
@@ -79,12 +79,10 @@ optimizer = tf.train.GradientDescentOptimizer(learning_constant).minimize(loss_o
 
 #Initializing the variables
 init = tf.global_variables_initializer()
-#Create a session
-
 
 label=angle_array#+1e-50-1e-50
 
-batch_x=(whole_data-200)/2000 #Normalisation
+batch_x=(whole_data-200)/2000 #Standardising data
 
 batch_y=angle_array
 
@@ -100,6 +98,10 @@ batch_y_test=batch_y[275713:,:]
 
 label_test=label
 
+losses = np.zeros(100)
+epochs = np.zeros(100)
+i = 0
+
 with tf.Session() as sess:
     sess.run(init)
     #Training epoch
@@ -112,6 +114,11 @@ with tf.Session() as sess:
         if epoch % 100 == 0 and epoch>10:
             print("Epoch:", '%d' % (epoch))
             print("Loss:", loss_op.eval({X: batch_x_train, Y: batch_y_train}) )
+            epochs[i] = epoch
+            losses[i] = loss_op.eval({X: batch_x_train, Y: batch_y_train})
+            i=i+1
+            
+        
 
 
     # Test model
@@ -121,9 +128,12 @@ with tf.Session() as sess:
     print("Accuracy:", np.square(accuracy.eval({X: batch_x_test, Y: batch_y_test})).mean() )
     print("Prediction:", pred.eval({X: batch_x_test}))
 
-    
+    plt.plot(epochs, losses)
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.show()
 
-    output=neural_network.eval({X: batch_x_train})
+    output=neural_network.eval({X: batch_x_test})
     
     df = DataFrame(output)
 
