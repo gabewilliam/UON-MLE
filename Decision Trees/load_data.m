@@ -23,3 +23,5 @@ labels_au5 = sh_labels(:,5);
 
 features_xy = cat(2, sh_features_x, sh_features_y);
 
+features_xy_flds = kdivide(features_xy, 10);
+labels_flds = kdivide(labels,10);
