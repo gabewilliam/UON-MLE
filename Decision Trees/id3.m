@@ -2,9 +2,9 @@
 % the best atribute with best threshold value.
 % For each atribute: 
 % The labels will be sorted in ascending order of that atribute's features
-% than we split the labels at each index and calculate the corresponding
-% gain. We than find that the best gain occurs at a split at the ith element.
-% the corresponding threshold value wil than be between the ith and the i+1 
+% then we split the labels at each index and calculate the corresponding
+% gain. We then find that the best gain occurs at a split at the ith element.
+% the corresponding threshold value will than be between the ith and the i+1 
 % element in the features array
 
 
