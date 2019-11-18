@@ -41,7 +41,7 @@ function tree = createDecisionTree(features, labels)
 
             for i = 1 : m
                 ans = i;
-                if features(i,index)< Best_Threshold
+                if features(i,index)<= Best_Threshold
                     nextleftdata=[nextleftdata;features(i,:)];
                     nextleftlabel=[nextleftlabel;labels(i,:)];
                 end
