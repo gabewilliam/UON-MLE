@@ -57,7 +57,7 @@ for i=1:length(labels_sorted)
 end
 
 % threshold value is somewhere inbetween the two feature values
-threshold = (features_sorted(index) + features_sorted(index + 1))/2;
+threshold = features_sorted(index);
    
 end
 
