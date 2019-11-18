@@ -26,7 +26,7 @@ for i = 1:n
     end
 end
 
-fprintf('Atribute %i at threshold %.2f gives the greatest information gain of %.3f ', [index, Best_Threshold, Best_Gain]);
+fprintf('Atribute %i at threshold %.2f gives the greatest information gain of %.3f \n ', [index, Best_Threshold, Best_Gain]);
 
 end
 
