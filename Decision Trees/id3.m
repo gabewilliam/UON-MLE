@@ -31,16 +31,16 @@ fprintf('Atribute %i at threshold %.2f gives the greatest information gain of %.
 end
 
 
-function [best_gain, threshold, index,features_sorted] = th(features,labels)
+function [best_gain, threshold, index, features_sorted] = th(features,labels)
 %finding best threshold for given atribute
 
 [labels_sorted, features_sorted] = sorting(labels, features);
-[p,n] = pn(labels_sorted);
+[p,n] = pn(labels_sorted)
 
 best_gain = 0;
-index = 2;
+index = 0;
 
-for i=1:length(labels_sorted)
+for i=1:length(labels_sorted)-1
     
 %splitting data in to lower values than threshold and including the
 %threshold value (at index i)
@@ -57,7 +57,7 @@ for i=1:length(labels_sorted)
 end
 
 % threshold value is somewhere inbetween the two feature values
-threshold = features_sorted(index);
+ threshold = features_sorted(index);
    
 end
 
@@ -76,7 +76,19 @@ end
 end
 
 function entropy = I(p,n)
-entropy = -(p/(p+n))*log2(p/(p+n))-(n/(p+n))*log2(n/(p+n));
+P_p = p/(p+n);
+P_n = n/(p+n);
+
+if p == 0
+    P_p = 1;
+end
+
+if n == 0
+    P_n = 1;
+end
+   
+    
+entropy = -(p/(p+n))*log2(P_p)-(n/(p+n))*log2(P_n);
 end
 
 function remainder_i = A_i(p,n,p_i,n_i)
