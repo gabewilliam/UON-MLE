@@ -35,7 +35,7 @@ function [best_gain, threshold, index, features_sorted] = th(features,labels)
 %finding best threshold for given atribute
 
 [labels_sorted, features_sorted] = sorting(labels, features);
-[p,n] = pn(labels_sorted)
+[p,n] = pn(labels_sorted);
 
 best_gain = 0;
 index = 0;
