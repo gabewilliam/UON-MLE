@@ -20,7 +20,7 @@ function tree = createDecisionTree(features, labels)
         [index,Best_Threshold,Best_Gain] = id3(features,labels);
         
         if index == 0
-            class = mean(labels);
+            class = mode(labels);
             kids = [];
             op = class;
             attribute = 'null';
