@@ -3,7 +3,11 @@ load_data;
 features =  cell2mat(features_xy_flds(1));
 labels = cell2mat(labels_flds(1));
 
+labels = labels(:,1);
+
 dTree = createDecisionTree(features,labels);
+
+DrawDecisionTree(dTree, ' ');
 
 function tree = createDecisionTree(features, labels)
     
@@ -29,7 +33,7 @@ function tree = createDecisionTree(features, labels)
 
             attribute = index;
             threshold = Best_Threshold;
-            op = attribute + ' <> ' + threshold;
+            op = threshold;
 
             [m,n1]=size(features); %n1=98
             [~,n2]=size(labels);  %n2=5 || 1
@@ -50,14 +54,23 @@ function tree = createDecisionTree(features, labels)
                     nextrightlabel=[nextrightlabel;labels(i,:)];
                 end
             end
-
-            leftKid = createDecisionTree(nextleftdata, nextleftlabel);
-            rightKid = createDecisionTree(nextrightdata, nextrightlabel);
-
-            kids = {leftKid, rightKid};
             
-            class = 'null';
-
+            if isempty(nextleftdata) || isempty(nextrightdata)
+                leftKid = 'null';
+                rightKid = 'null';
+                class = mode(labels);
+                kids = [];
+                op = class;
+                attribute = 'null';
+                threshold = 'null';
+            else
+                leftKid = createDecisionTree(nextleftdata, nextleftlabel);
+                rightKid = createDecisionTree(nextrightdata, nextrightlabel);
+                kids = {leftKid, rightKid};
+                class = 'null';
+            
+            end
+              
         end
         
     end
