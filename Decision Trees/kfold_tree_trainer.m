@@ -21,7 +21,7 @@ for i = 1:n
     
     dTrees(i) = createDecisionTree(train_data, train_labels);
     
-    [~,k] = size(test_labels);
+    [k,~] = size(test_labels);
     
     %Calculate evaluative measures
     tree_outputs = zeros(k,1);
