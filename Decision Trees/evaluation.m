@@ -5,17 +5,17 @@ function [precision,recall,F1] = evaluation(tree_results,test_labels)
 
 
 for i=1:length(tree_results) %labels from training
-    for j=1:length(test_labels) %labels from test set
-        if(tree_results(i,j)==1 && test_labels(i,j)==1)
+   % for j=1:length(test_labels) %labels from test set
+        if(tree_results(i)==1 && test_labels(i)==1)
             TP=TP+1;
-        elseif(test_results(i,j)==0 && test_labels(i,j)==0)
+        elseif(tree_results(i)==1 && test_labels(i)==0)
             FP=FP+1;    
-        elseif(test_results(i,j)==0 && test_labels(i,j)==0)
+        elseif(tree_results(i)==0 && test_labels(i)==0)
             TN=TN+1;
         else
             FN=FN+1;
         end
-    end
+    %end
 end
 
 

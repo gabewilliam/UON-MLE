@@ -23,8 +23,13 @@ labels_au5 = sh_labels(:,5);
 
 features_xy = cat(2, sh_features_x, sh_features_y);
 
-%Divide data into N folds
-N=1000;
+%Divide data into K folds
+K=10;
 
-features_xy_flds = kdivide(features_xy, N);
-labels_flds = kdivide(labels,N);
+%Cut data down to size N
+N=1000; 
+features_xy = features_xy(1:N, :);
+labels = labels(1:N,1);
+
+features_xy_flds = kdivide(features_xy, K);
+labels_flds = kdivide(labels, K);
