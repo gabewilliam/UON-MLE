@@ -38,5 +38,5 @@ for i = 1:n
 end
 
 %Save trees for later use
-save('trees', dTrees);
-save('eval', evaluations);
+save('trees', 'dTrees');
+save('eval', 'evaluations');
