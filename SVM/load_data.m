@@ -25,7 +25,7 @@ features_xy = cat(2, sh_features_x, sh_features_y);
 
 %Divide data into K folds
 K=10;
-N = 3000;
+N = 10000;
 
 %Cut data down to size N
 Xtest = sh_features_x(1:N,1);
