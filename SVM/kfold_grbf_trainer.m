@@ -1,4 +1,4 @@
-function evaluations = kfold_grbf_trainer(sigma)
+function evaluations = kfold_grbf_trainer(C,sigma)
 
 load_data;
 
@@ -8,13 +8,15 @@ n = 10;
 evaluations = zeros(n,3);
 
 for i = 1:n
+    
+    fprintf('Fold %i of %i\n',i,n);
    
     train_data =  cell2mat(features_xy_flds(1:end ~= i));
     train_labels = cell2mat(labels_flds(1:end ~= i));
     test_data = cell2mat(features_xy_flds(i));
     test_labels = cell2mat(labels_flds(i));
     
-    disp(size(train_data));
+    %disp(size(train_data));
     
     %AU1 
     train_labels = train_labels(:,1);
@@ -23,7 +25,7 @@ for i = 1:n
       
     [k,~] = size(test_labels);
     
-    sv = fitcsvm(train_data,train_labels, 'KernelFunction','gaussian', 'BoxConstraint',1, 'KernelScale', sigma);
+    sv = fitcsvm(train_data,train_labels, 'KernelFunction','gaussian', 'BoxConstraint',C, 'KernelScale', sigma);
     sv.predict(test_data);
     
     %Calculate evaluative measures
