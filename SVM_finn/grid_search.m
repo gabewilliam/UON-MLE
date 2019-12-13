@@ -3,8 +3,8 @@ function [q,C] = grid_search(features_xy,labels,k)
 % n x n grid
 n = 3;
 
-q_grid = linspace(1,21,n);
-C_grid = linspace(1,61,n);
+q_grid = linspace(1,19,n);
+C_grid = linspace(1,59,n);
 
 tic
 
@@ -31,6 +31,8 @@ f = evals;
 index = I1(:,:,I2);
 C = C_grid(index(1))
 q = q_grid(index(2))
+
+end
 
 %plot(q_grid, evals(:,:,1));
 %hold on;
